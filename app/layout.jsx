@@ -3,17 +3,18 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ParticleBackground from '@/components/ParticleBackground';
 import CustomCursor from '@/components/CustomCursor';
+import PageLoader from '@/components/PageLoader';
 
 export const metadata = {
-  title: 'Portfolio',
-  description: 'My personal portfolio',
+  title: 'Portfolio | Ayushman Singh',
+  description: 'Full Stack Developer Portfolio',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="noise bg-dark min-h-screen">
-        {/* Custom cursor elements */}
+        <PageLoader />
         <div id="cursor-dot" />
         <div id="cursor-ring" />
         <CustomCursor />

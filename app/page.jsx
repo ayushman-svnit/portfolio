@@ -2,6 +2,7 @@ import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import HeroSection from '@/components/HeroSection';
 import SkillsSection from '@/components/SkillsSection';
+import VisitorCounter from '@/components/VisitorCounter';
 
 async function getData() {
   try {
@@ -24,6 +25,7 @@ export default async function HomePage() {
     <>
       <HeroSection profile={profile} />
       <SkillsSection skills={skills} />
+      <VisitorCounter />
     </>
   );
 }
