@@ -3,6 +3,9 @@ import { db } from '@/lib/firebase';
 import EducationCard from '@/components/EducationCard';
 import PageHeader from '@/components/PageHeader';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getEducation() {
   try {
     const q = query(collection(db, 'education'), orderBy('order', 'asc'));

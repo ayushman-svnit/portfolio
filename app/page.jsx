@@ -4,6 +4,9 @@ import HeroSection from '@/components/HeroSection';
 import SkillsSection from '@/components/SkillsSection';
 import VisitorCounter from '@/components/VisitorCounter';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getData() {
   try {
     const [skillsSnap, profileSnap] = await Promise.all([

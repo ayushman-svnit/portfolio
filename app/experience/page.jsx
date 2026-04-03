@@ -3,6 +3,9 @@ import { db } from '@/lib/firebase';
 import ExperienceCard from '@/components/ExperienceCard';
 import PageHeader from '@/components/PageHeader';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getExperience() {
   try {
     const q = query(collection(db, 'experience'), orderBy('order', 'asc'));

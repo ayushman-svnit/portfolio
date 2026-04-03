@@ -3,6 +3,9 @@ import { db } from '@/lib/firebase';
 import ProjectCard from '@/components/ProjectCard';
 import PageHeader from '@/components/PageHeader';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getProjects() {
   try {
     const q = query(collection(db, 'projects'), orderBy('order', 'asc'));
