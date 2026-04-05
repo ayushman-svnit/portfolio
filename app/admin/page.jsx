@@ -129,7 +129,7 @@ function ProfileForm({ profile, onSave, notify }) {
 }
 
 function ProjectsAdmin({ items, onDelete, onSave, notify }) {
-  const empty = { title:"",subtitle:"",description:"",keyFeatures:"",tech:"",github:"",live:"",image:"",status:"Completed",featured:false,order:0 };
+  const empty = { title:"",subtitle:"",description:"",keyFeatures:"",tech:"",github:"",live:"",image:"",status:"Completed",featured:false,order:0,duration:"" };
   const [form, setForm] = useState(empty);
   const [editId, setEditId] = useState(null);
 
@@ -147,6 +147,7 @@ function ProjectsAdmin({ items, onDelete, onSave, notify }) {
       status: p.status || "Completed",
       featured: p.featured || false,
       order: p.order ?? 0,
+      duration: p.duration || "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -166,7 +167,7 @@ function ProjectsAdmin({ items, onDelete, onSave, notify }) {
     setForm(empty); onSave();
   };
 
-  const fields = [{k:"title",p:"Title",r:true},{k:"subtitle",p:"Subtitle"},{k:"description",p:"Description"},{k:"keyFeatures",p:"Key Features (one per line)"},{k:"tech",p:"Tech (comma separated)"},{k:"github",p:"GitHub URL"},{k:"live",p:"Live URL"},{k:"order",p:"Display order (1, 2, 3...)"}];
+  const fields = [{k:"title",p:"Title",r:true},{k:"subtitle",p:"Subtitle"},{k:"description",p:"Description"},{k:"keyFeatures",p:"Key Features (one per line)"},{k:"tech",p:"Tech (comma separated)"},{k:"github",p:"GitHub URL"},{k:"live",p:"Live URL"},{k:"duration",p:"Duration (e.g. Jan 2024  or  Jan 2024 - Mar 2025)"},{k:"order",p:"Display order (1, 2, 3...)"}];
 
   return (
     <div className="flex flex-col gap-6">

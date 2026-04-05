@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Star, ChevronRight } from "lucide-react";
+import { ExternalLink, Github, Star, ChevronRight, Calendar } from "lucide-react";
 
 const statusColors = {
   Completed: "bg-emerald-500/20 border-emerald-500/30 text-emerald-400",
@@ -51,6 +51,12 @@ export default function ProjectCard({ project, index }) {
             <span className={"inline-block mt-1.5 px-3 py-0.5 rounded-full border text-xs font-semibold " + (statusColors[project.status] || statusColors["Completed"])}>
               {project.status}
             </span>
+          )}
+          {project.duration && (
+            <div className="flex items-center gap-1.5 mt-1.5 text-slate-400 text-xs">
+              <Calendar size={11} />
+              <span>{project.duration}</span>
+            </div>
           )}
         </div>
       </div>
