@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, serverTimestamp, orderBy, query } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash2, Save, Lock, LogOut, Code2, Briefcase, GraduationCap, Zap, User } from "lucide-react";
+import { Plus, Trash2, Save, Lock, LogOut, Code2, Briefcase, GraduationCap, Zap, User, Trophy } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 
 const tabs = [
@@ -12,6 +12,7 @@ const tabs = [
   { id: "projects", label: "Projects", icon: Code2 },
   { id: "experience", label: "Experience", icon: Briefcase },
   { id: "education", label: "Education", icon: GraduationCap },
+  { id: "hackathons", label: "Hackathons", icon: Trophy },
   { id: "skills", label: "Skills", icon: Zap },
 ];
 
@@ -19,7 +20,7 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [pass, setPass] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
-  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [], profile: {} });
+  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [], hackathons: [], profile: {} });
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -38,18 +39,20 @@ export default function AdminPage() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [proj, exp, edu, skills, profileSnap] = await Promise.all([
+      const [proj, exp, edu, skills, profileSnap, hackSnap] = await Promise.all([
         getDocs(query(collection(db, "projects"), orderBy("order", "asc"))),
         getDocs(query(collection(db, "experience"), orderBy("order", "asc"))),
         getDocs(query(collection(db, "education"), orderBy("order", "asc"))),
         getDocs(collection(db, "skills")),
         getDocs(collection(db, "profile")),
+        getDocs(query(collection(db, "hackathons"), orderBy("order", "asc"))),
       ]);
       setData({
         projects: proj.docs.map((d) => ({ id: d.id, ...d.data() })),
         experience: exp.docs.map((d) => ({ id: d.id, ...d.data() })),
         education: edu.docs.map((d) => ({ id: d.id, ...d.data() })),
         skills: skills.docs.map((d) => ({ id: d.id, ...d.data() })),
+        hackathons: hackSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
         profile: profileSnap.docs[0]?.data() || {},
       });
     } catch (e) { setMsg("Fetch error: " + e.message); }
@@ -103,6 +106,7 @@ export default function AdminPage() {
               {activeTab === "experience" && <ExperienceAdmin items={data.experience} onDelete={(id) => deleteItem("experience", id)} onSave={fetchAll} notify={notify} />}
               {activeTab === "education" && <EducationAdmin items={data.education} onDelete={(id) => deleteItem("education", id)} onSave={fetchAll} notify={notify} />}
               {activeTab === "skills" && <SkillsAdmin items={data.skills} onDelete={(id) => deleteItem("skills", id)} onSave={fetchAll} notify={notify} />}
+              {activeTab === "hackathons" && <HackathonsAdmin items={data.hackathons} onDelete={(id) => deleteItem("hackathons", id)} onSave={fetchAll} notify={notify} />}
             </motion.div>
           </AnimatePresence>
         )}
@@ -320,6 +324,74 @@ function SkillsAdmin({ items, onDelete, onSave, notify }) {
         <div className="flex items-center justify-between gap-4 w-full">
           <div><p className="font-semibold text-white">{s.name}</p><p className="text-slate-400 text-xs">{s.category}</p></div>
           <span className="text-primary text-sm font-mono flex-shrink-0">{s.level}/10</span>
+        </div>
+      )} />
+    </div>
+  );
+}
+
+function HackathonsAdmin({ items, onDelete, onSave, notify }) {
+  const empty = { name:"", organizer:"", date:"", location:"", position:"", teamSize:"", description:"", tags:"", order:0 };
+  const [form, setForm] = useState(empty);
+  const [editId, setEditId] = useState(null);
+
+  const startEdit = (h) => {
+    setEditId(h.id);
+    setForm({
+      name: h.name||"", organizer: h.organizer||"", date: h.date||"",
+      location: h.location||"", position: h.position||"", teamSize: h.teamSize||"",
+      description: h.description||"",
+      tags: Array.isArray(h.tags) ? h.tags.join(", ") : (h.tags||""),
+      order: h.order??0,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const cancelEdit = () => { setEditId(null); setForm(empty); };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const payload = { ...form, tags: form.tags.split(",").map(t=>t.trim()).filter(Boolean), order: Number(form.order) };
+    if (editId) { await setDoc(doc(db,"hackathons",editId), payload, { merge: true }); notify("Hackathon updated!"); setEditId(null); }
+    else { await addDoc(collection(db,"hackathons"), payload); notify("Hackathon added!"); }
+    setForm(empty); onSave();
+  };
+
+  const positions = ["Winner", "1st Runner Up", "2nd Runner Up", "Finalist", "Participant"];
+  const fields = [
+    {k:"name",p:"Hackathon Name",r:true},
+    {k:"organizer",p:"Organizer / Host"},
+    {k:"date",p:"Date (e.g. Jan 2025 or Jan - Feb 2025)"},
+    {k:"location",p:"Location (e.g. Online / Delhi, India)"},
+    {k:"teamSize",p:"Team Size (e.g. 3)"},
+    {k:"description",p:"Short description of what you built"},
+    {k:"tags",p:"Tags (comma separated: React, AI, Hackathon)"},
+    {k:"order",p:"Display order"},
+  ];
+
+  return (
+    <div className="flex flex-col gap-6">
+      <form onSubmit={submit} className="glass border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold">{editId ? "Edit Hackathon" : "Add Hackathon"}</h2>
+          {editId && <button type="button" onClick={cancelEdit} className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded-lg glass border border-white/10 transition-colors">Cancel</button>}
+        </div>
+        {fields.map(({k,p,r}) => (
+          <input key={k} placeholder={p} value={form[k]} required={r} onChange={(e) => setForm({...form,[k]:e.target.value})}
+            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-primary/50 text-sm" />
+        ))}
+        <select value={form.position} onChange={(e) => setForm({...form,position:e.target.value})}
+          className="w-full px-4 py-3 rounded-xl bg-[#111118] border border-white/10 text-white focus:outline-none focus:border-primary/50 text-sm">
+          <option value="">Select Position / Achievement</option>
+          {positions.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+        <button type="submit" className={"flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold hover:opacity-90 w-fit " + (editId ? "bg-gradient-to-r from-amber-500 to-orange-500" : "bg-gradient-to-r from-primary to-secondary")}>
+          {editId ? <><Save size={15}/>Update Hackathon</> : <><Plus size={15}/>Add Hackathon</>}
+        </button>
+      </form>
+      <ItemList items={items} onDelete={onDelete} onEdit={startEdit} renderItem={(h) => (
+        <div>
+          <p className="font-semibold text-white">{h.name}</p>
+          <p className="text-slate-400 text-xs mt-0.5">{h.position && <span className="text-primary mr-2">{h.position}</span>}{h.date}</p>
         </div>
       )} />
     </div>
