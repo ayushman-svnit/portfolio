@@ -14,7 +14,7 @@ export default function PageHeader({ badge, title, highlight, description }) {
           <span className="section-label">{badge}</span>
         </div>
       )}
-      <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight">
+      <h1 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight font-display">
         {title}{" "}
         <span className="gradient-text">{highlight}</span>
       </h1>

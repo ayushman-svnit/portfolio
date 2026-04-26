@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const LINES = [
-  { text: "Initializing cursed energy...", delay: 0 },
-  { text: "Loading domain expansion...", delay: 0.4 },
-  { text: "Connecting to the void...", delay: 0.8 },
-  { text: "Rendering components...", delay: 1.2 },
-  { text: "Unlimited void — ready ✓", delay: 1.6, done: true },
+  { text: "Initializing limitless protocol...", delay: 0 },
+  { text: "Rendering infinite space...", delay: 0.4 },
+  { text: "Connecting to infinite code...", delay: 0.8 },
+  { text: "Executing domain.sh ...", delay: 1.2 },
+  { text: "Deploying domain expansion...", delay: 1.6 },
+  { text: "✦ Unlimited Void active ✓", delay: 2.0, done: true },
 ];
 
 export default function PageLoader() {
@@ -17,11 +18,11 @@ export default function PageLoader() {
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const targets = [20, 45, 65, 85, 100];
+    const targets = [15, 35, 55, 70, 85, 100];
     targets.forEach((t, i) => setTimeout(() => setProgress(t), 300 + i * 380));
     LINES.forEach((_, i) => setTimeout(() => setVisibleLines(i + 1), 200 + i * 400));
-    setTimeout(() => setExiting(true), 2600);
-    setTimeout(() => setLoading(false), 3200);
+    setTimeout(() => setExiting(true), 3200);
+    setTimeout(() => setLoading(false), 3800);
   }, []);
 
   return (
@@ -87,7 +88,7 @@ export default function PageLoader() {
               {/* Progress */}
               <div className="px-6 pb-6">
                 <div className="flex justify-between text-xs font-mono mb-2">
-                  <span className="text-purple-500/60">cursed_energy</span>
+                  <span className="text-purple-500/60">limitless_output</span>
                   <span className={progress === 100 ? "text-purple-400" : "text-slate-600"}>{progress}%</span>
                 </div>
                 <div className="w-full h-1 rounded-full overflow-hidden" style={{ background: "rgba(124,58,237,0.15)" }}>

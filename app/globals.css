@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/another-danger');
+@import url('https://fonts.cdnfonts.com/css/blacker-display');
+@import url('https://fonts.cdnfonts.com/css/satoshi');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,7 +22,7 @@ html { scroll-behavior: smooth; }
 body {
   background-color: #06060f;
   color: #e2e8f0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Satoshi', 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
