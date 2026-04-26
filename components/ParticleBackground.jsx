@@ -16,96 +16,88 @@ export default function ParticleBackground() {
     };
     resize();
     window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
-    const onMouseMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
-    window.addEventListener("mousemove", onMouseMove);
+    // Cursed energy particles — purple, blue, rare red
+    const particles = Array.from({ length: 100 }, () => {
+      const rand = Math.random();
+      const color = rand > 0.7 ? "124,58,237" : rand > 0.4 ? "37,99,235" : rand > 0.05 ? "147,51,234" : "220,38,38";
+      return {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.5 + 0.3,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.3,
+        opacity: Math.random() * 0.5 + 0.1,
+        color,
+      };
+    });
 
-    // Particles
-    const particles = Array.from({ length: 120 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 1.8 + 0.3,
-      dx: (Math.random() - 0.5) * 0.35,
-      dy: (Math.random() - 0.5) * 0.35,
-      opacity: Math.random() * 0.5 + 0.1,
-      color: Math.random() > 0.6 ? "99,102,241" : Math.random() > 0.5 ? "139,92,246" : "6,182,212",
-      baseX: 0, baseY: 0,
-    }));
-    particles.forEach(p => { p.baseX = p.x; p.baseY = p.y; });
-
-    // Cursor trail
-    const trail = [];
-    const MAX_TRAIL = 20;
-
-    // Cursor ripples
     const ripples = [];
-    const onClick = (e) => {
-      ripples.push({ x: e.clientX, y: e.clientY, r: 0, maxR: 120, alpha: 0.6 });
-    };
-    window.addEventListener("click", onClick);
+    window.addEventListener("click", (e) => {
+      ripples.push({ x: e.clientX, y: e.clientY, r: 0, alpha: 0.7 });
+    });
+
+    const trail = [];
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // --- Cursor trail ---
+      // Trail
       trail.push({ x: mouse.x, y: mouse.y });
-      if (trail.length > MAX_TRAIL) trail.shift();
-      for (let i = 0; i < trail.length; i++) {
-        const t = trail[i];
-        const alpha = (i / trail.length) * 0.25;
-        const size = (i / trail.length) * 6;
+      if (trail.length > 18) trail.shift();
+      trail.forEach((t, i) => {
+        const a = (i / trail.length) * 0.2;
+        const s = (i / trail.length) * 5;
         ctx.beginPath();
-        ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(99,102,241,${alpha})`;
+        ctx.arc(t.x, t.y, s, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(124,58,237,${a})`;
         ctx.fill();
-      }
+      });
 
-      // --- Cursor glow ---
+      // Cursor glow — hollow purple
       if (mouse.x > 0) {
-        const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 180);
-        grad.addColorStop(0, "rgba(99,102,241,0.12)");
-        grad.addColorStop(0.5, "rgba(139,92,246,0.05)");
-        grad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = grad;
+        const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 160);
+        g.addColorStop(0, "rgba(124,58,237,0.1)");
+        g.addColorStop(0.5, "rgba(37,99,235,0.04)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 180, 0, Math.PI * 2);
+        ctx.arc(mouse.x, mouse.y, 160, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // --- Click ripples ---
+      // Click ripples — cursed energy burst
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rp = ripples[i];
-        rp.r += 4;
-        rp.alpha -= 0.018;
+        rp.r += 5;
+        rp.alpha -= 0.02;
         if (rp.alpha <= 0) { ripples.splice(i, 1); continue; }
         ctx.beginPath();
         ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(99,102,241,${rp.alpha})`;
+        ctx.strokeStyle = `rgba(124,58,237,${rp.alpha})`;
         ctx.lineWidth = 1.5;
         ctx.stroke();
-        // second ring
         ctx.beginPath();
-        ctx.arc(rp.x, rp.y, rp.r * 0.6, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(6,182,212,${rp.alpha * 0.5})`;
+        ctx.arc(rp.x, rp.y, rp.r * 0.55, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(220,38,38,${rp.alpha * 0.4})`;
         ctx.lineWidth = 1;
         ctx.stroke();
       }
 
-      // --- Particles ---
+      // Particles
       particles.forEach((p) => {
-        // Mouse repulsion
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
-          const force = (100 - dist) / 100;
-          p.x += (dx / dist) * force * 3;
-          p.y += (dy / dist) * force * 3;
+        if (dist < 90) {
+          const f = (90 - dist) / 90;
+          p.x += (dx / dist) * f * 2.5;
+          p.y += (dy / dist) * f * 2.5;
         } else {
           p.x += p.dx;
           p.y += p.dy;
         }
-
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
 
@@ -115,33 +107,31 @@ export default function ParticleBackground() {
         ctx.fill();
       });
 
-      // --- Connections ---
+      // Connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130) {
-            const alpha = 0.12 * (1 - dist / 130);
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 120) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(99,102,241,${alpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = `rgba(124,58,237,${0.1 * (1 - d / 120)})`;
+            ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
-        // Connect nearby particles to cursor
+        // Cursor connections
         const dx = particles[i].x - mouse.x;
         const dy = particles[i].y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 160) {
-          const alpha = 0.25 * (1 - dist / 160);
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 140) {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(139,92,246,${alpha})`;
-          ctx.lineWidth = 0.8;
+          ctx.strokeStyle = `rgba(147,51,234,${0.22 * (1 - d / 140)})`;
+          ctx.lineWidth = 0.7;
           ctx.stroke();
         }
       }
@@ -153,15 +143,8 @@ export default function ParticleBackground() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("click", onClick);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
-    />
-  );
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
 }

@@ -7,11 +7,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#6366f1',
-        secondary: '#8b5cf6',
-        accent: '#06b6d4',
-        dark: '#0a0a0f',
-        card: '#111118',
+        primary:   '#7c3aed',   // cursed purple
+        secondary: '#2563eb',   // infinity blue
+        accent:    '#dc2626',   // cursed red
+        hollow:    '#9333ea',   // hollow purple
+        dark:      '#06060f',   // void
+        card:      '#0d0d1a',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

@@ -1,7 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ArrowDown, Code2, Sparkles, ExternalLink } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowDown, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import HollowCollision from "./HollowCollision";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 32 },
@@ -19,8 +20,17 @@ export default function HeroSection({ profile }) {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid">
-      {/* Radial spotlight */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(99,102,241,0.15),transparent)]" />
+      {/* Void radial spotlight */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(124,58,237,0.18),transparent)]" />
+
+      {/* Hollow collision — bottom half only, behind everything */}
+      <div className="absolute bottom-0 right-0 w-full h-[60%] pointer-events-none z-0">
+        <HollowCollision />
+      </div>
+
+      {/* Cursed energy corner accents */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[radial-gradient(circle,rgba(37,99,235,0.08)_0%,transparent_70%)]" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-[radial-gradient(circle,rgba(220,38,38,0.05)_0%,transparent_70%)]" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-32 flex flex-col lg:flex-row items-center gap-20">
 
@@ -49,9 +59,9 @@ export default function HeroSection({ profile }) {
           </motion.p>
 
           <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3 justify-center lg:justify-start mb-10">
-            <Link href="/projects"
-              className="group relative px-7 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm overflow-hidden transition-all duration-300 hover:scale-105"
-              style={{ boxShadow: "0 0 30px rgba(99,102,241,0.3)" }}>
+            <Link href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({behavior:'smooth'}); }}
+              className="group relative px-7 py-3 rounded-xl text-white font-semibold text-sm overflow-hidden transition-all duration-300 hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 0 30px rgba(124,58,237,0.4)" }}>
               <span className="relative z-10 flex items-center gap-2">View Projects <ExternalLink size={14} /></span>
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
@@ -89,9 +99,13 @@ export default function HeroSection({ profile }) {
             <div className="absolute inset-6 rounded-full border border-secondary/10 animate-pulse-ring" style={{ animationDelay: "1s" }} />
 
             {/* Avatar */}
-            <div className="absolute inset-10 rounded-full bg-gradient-to-br from-primary via-secondary to-accent p-[2px] animate-float"
-              style={{ boxShadow: "0 0 60px rgba(99,102,241,0.3), 0 0 120px rgba(99,102,241,0.1)" }}>
-              <div className="w-full h-full rounded-full bg-[#080810] flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-10 rounded-full p-[2px] animate-float"
+              style={{
+                background: "linear-gradient(135deg, #7c3aed, #2563eb, #dc2626, #9333ea)",
+                boxShadow: "0 0 60px rgba(124,58,237,0.4), 0 0 120px rgba(124,58,237,0.15)"
+              }}>
+              <div className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
+                style={{ background: "#06060f" }}>
                 {profile?.avatar ? (
                   <img src={profile.avatar} alt={name} className="w-full h-full object-cover rounded-full" />
                 ) : (
@@ -104,12 +118,14 @@ export default function HeroSection({ profile }) {
 
             {/* Floating chips */}
             <motion.div animate={{ y: [-4, 4, -4] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-2 -right-6 glass border border-white/10 rounded-lg px-3 py-1.5 text-xs font-mono text-primary/80 whitespace-nowrap">
-              &lt;code /&gt;
+              className="absolute -top-2 -right-6 rounded-lg px-3 py-1.5 text-xs font-mono whitespace-nowrap"
+              style={{ background: "rgba(124,58,237,0.12)", border: "1px solid rgba(124,58,237,0.25)", color: "#a78bfa" }}>
+              ✦ infinite code
             </motion.div>
             <motion.div animate={{ y: [4, -4, 4] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-2 -left-6 glass border border-white/10 rounded-lg px-3 py-1.5 text-xs font-mono text-secondary/80 whitespace-nowrap">
-              build()
+              className="absolute -bottom-2 -left-6 rounded-lg px-3 py-1.5 text-xs font-mono whitespace-nowrap"
+              style={{ background: "rgba(37,99,235,0.1)", border: "1px solid rgba(37,99,235,0.2)", color: "#93c5fd" }}>
+              ∞ void.build()
             </motion.div>
           </div>
         </motion.div>
