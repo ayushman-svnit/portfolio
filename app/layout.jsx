@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ParticleBackground from '@/components/ParticleBackground';
 import CustomCursor from '@/components/CustomCursor';
-import PageLoader from '@/components/PageLoader';
+import SupernovaLoader from '@/components/SupernovaLoader';
 
 export const metadata = {
   title: 'Portfolio | Ayushman Singh',
@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="noise bg-dark min-h-screen">
-        <PageLoader />
+        <SupernovaLoader />
         <div id="cursor-dot" />
         <div id="cursor-ring" />
         <CustomCursor />
