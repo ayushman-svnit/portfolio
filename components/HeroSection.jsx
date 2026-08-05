@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, ArrowDown, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import HeroBg from "./HeroBg";
 import HollowCollision from "./HollowCollision";
 
@@ -18,6 +19,51 @@ export default function HeroSection({ profile }) {
   const github = profile?.github || "#";
   const linkedin = profile?.linkedin || "#";
   const email = profile?.email || "#";
+
+  // Letter-by-letter typing effect (infinite loop)
+  const [displayedName, setDisplayedName] = useState("");
+  const [startTyping, setStartTyping] = useState(false);
+  
+  useEffect(() => {
+    // Start typing after a delay (to account for loading animation)
+    const startDelay = setTimeout(() => {
+      setStartTyping(true);
+    }, 7500); // Wait for loader to complete (6.9s) + extra buffer
+    
+    return () => clearTimeout(startDelay);
+  }, []);
+  
+  useEffect(() => {
+    if (!startTyping) return;
+    
+    let currentIndex = 0;
+    let isDeleting = false;
+    
+    const typingInterval = setInterval(() => {
+      if (!isDeleting && currentIndex <= name.length) {
+        // Typing forward
+        setDisplayedName(name.substring(0, currentIndex));
+        currentIndex++;
+      } else if (!isDeleting && currentIndex > name.length) {
+        // Pause at end before deleting
+        setTimeout(() => {
+          isDeleting = true;
+        }, 2000); // Wait 2 seconds before deleting
+      } else if (isDeleting && currentIndex > 0) {
+        // Deleting backward
+        currentIndex--;
+        setDisplayedName(name.substring(0, currentIndex));
+      } else if (isDeleting && currentIndex === 0) {
+        // Reset to start typing again
+        isDeleting = false;
+        setTimeout(() => {
+          currentIndex = 0;
+        }, 500); // Brief pause before retyping
+      }
+    }, isDeleting ? 50 : 150); // Faster deletion, slower typing
+    
+    return () => clearInterval(typingInterval);
+  }, [name, startTyping]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -46,8 +92,9 @@ export default function HeroSection({ profile }) {
             <span className="text-white text-5xl lg:text-6xl block" style={{ fontFamily: "'Blacker Display', serif" }}>
               Hi, I&apos;m
             </span>
-            <span className="gradient-text text-5xl lg:text-7xl block pb-3" style={{ fontFamily: "'Another Danger', cursive", lineHeight: "1.2" }}>
-              {name}
+            <span className="gradient-text text-5xl lg:text-7xl block pb-3 min-h-[80px] lg:min-h-[100px]" style={{ fontFamily: "'Another Danger', cursive", lineHeight: "1.2" }}>
+              {displayedName || '\u00A0'}
+              <span className="animate-pulse">|</span>
             </span>
           </motion.h1>
 

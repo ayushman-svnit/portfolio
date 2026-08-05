@@ -175,9 +175,9 @@ export default function SupernovaLoader({ onComplete }) {
         }
       }
       
-      // PHASE 4: BLACK FLASH (5-5.2s)
+      // PHASE 4: Fade to black (5-5.2s)
       else if (elapsed >= 5 && elapsed < 5.2) {
-        const flashProgress = (elapsed - 5) / 0.2;
+        const fadeProgress = (elapsed - 5) / 0.2;
         
         particles.forEach((p, i) => {
           p.life -= 0.1;
@@ -191,22 +191,59 @@ export default function SupernovaLoader({ onComplete }) {
           ctx.fill();
         });
         
-        const fadeIntensity = 1 - flashProgress;
+        const fadeIntensity = 1 - fadeProgress;
         drawCore(blueCore.x, blueCore.y, 'rgba(59, 130, 246, ', fadeIntensity);
         drawCore(redCore.x, redCore.y, 'rgba(239, 68, 68, ', fadeIntensity);
         
-        const flashOpacity = Math.min(flashProgress * 5, 1);
-        ctx.fillStyle = `rgba(0, 0, 0, ${flashOpacity})`;
+        const blackOpacity = Math.min(fadeProgress * 5, 1);
+        ctx.fillStyle = `rgba(0, 0, 0, ${blackOpacity})`;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       
-      // Cinematic curtain wipe (5.2-5.9s)
-      else if (elapsed >= 5.2 && elapsed < 5.9) {
-        const wipeProgress = (elapsed - 5.2) / 0.7;
+      // Text reveal - AYUSHMAN SINGH letter by letter (5.2-6.2s)
+      else if (elapsed >= 5.2 && elapsed < 6.2) {
+        const textProgress = (elapsed - 5.2) / 1.0;
         
         // Black background
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Text: AYUSHMAN SINGH (14 characters including space)
+        const fullText = 'AYUSHMAN SINGH';
+        const charsToShow = Math.floor(textProgress * fullText.length);
+        const displayText = fullText.substring(0, charsToShow);
+        
+        // Draw text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 48px system-ui, -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.letterSpacing = '4px';
+        
+        // Add subtle shadow for depth
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillText(displayText, centerX, centerY);
+        ctx.shadowBlur = 0;
+      }
+      
+      // Cinematic curtain wipe (6.2-6.9s)
+      else if (elapsed >= 6.2 && elapsed < 6.9) {
+        const wipeProgress = (elapsed - 6.2) / 0.7;
+        
+        // Black background with full text
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Full text visible
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 48px system-ui, -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillText('AYUSHMAN SINGH', centerX, centerY);
+        ctx.shadowBlur = 0;
         
         // Hero section bg curtain sliding up
         const curtainY = canvas.height * (1 - wipeProgress);
@@ -215,7 +252,7 @@ export default function SupernovaLoader({ onComplete }) {
       }
       
       // Complete
-      else if (elapsed >= 5.9) {
+      else if (elapsed >= 6.9) {
         setIsVisible(false);
         if (onComplete) onComplete();
         return;
