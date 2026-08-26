@@ -79,6 +79,7 @@ export default async function HomePage() {
           {projects.length > 0
             ? <div className="flex flex-col gap-6 sm:gap-8 mt-10 sm:mt-12">
                 {projects
+                  .filter(project => !project.hidden) // Only show non-hidden projects
                   .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)) // Featured first
                   .map((project, i) => <ProjectCard key={project.id} project={project} index={i} />)}
               </div>

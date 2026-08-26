@@ -133,7 +133,7 @@ function ProfileForm({ profile, onSave, notify }) {
 }
 
 function ProjectsAdmin({ items, onDelete, onSave, notify }) {
-  const empty = { title:"",subtitle:"",description:"",keyFeatures:"",tech:"",github:"",live:"",image:"",status:"Completed",featured:false,order:0,duration:"" };
+  const empty = { title:"",subtitle:"",description:"",keyFeatures:"",tech:"",github:"",live:"",image:"",status:"Completed",featured:false,hidden:false,order:0,duration:"" };
   const [form, setForm] = useState(empty);
   const [editId, setEditId] = useState(null);
 
@@ -150,6 +150,7 @@ function ProjectsAdmin({ items, onDelete, onSave, notify }) {
       image: p.image || "",
       status: p.status || "Completed",
       featured: p.featured || false,
+      hidden: p.hidden || false,
       order: p.order ?? 0,
       duration: p.duration || "",
     });
@@ -188,13 +189,25 @@ function ProjectsAdmin({ items, onDelete, onSave, notify }) {
           {["Completed","In Progress","Planned"].map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <ImageUpload value={form.image} onChange={(url) => setForm({...form,image:url})} label="Project Image" />
-        <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({...form,featured:e.target.checked})} className="accent-primary" />Featured</label>
+        <div className="flex gap-4">
+          <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({...form,featured:e.target.checked})} className="accent-primary" />Featured</label>
+          <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer"><input type="checkbox" checked={form.hidden} onChange={(e) => setForm({...form,hidden:e.target.checked})} className="accent-slate-500" />Hidden</label>
+        </div>
         <button type="submit" className={"flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold hover:opacity-90 w-fit " + (editId ? "bg-gradient-to-r from-amber-500 to-orange-500" : "bg-gradient-to-r from-primary to-secondary")}>
           {editId ? <><Save size={15} />Update Project</> : <><Plus size={15} />Add Project</>}
         </button>
       </form>
       <ItemList items={items} onDelete={onDelete} onEdit={startEdit} renderItem={(p) => (
-        <div><p className="font-semibold text-white">{p.title}</p><p className="text-slate-400 text-xs mt-1">{p.description?.slice(0,80)}</p></div>
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <p className="font-semibold text-white">{p.title}</p>
+            <p className="text-slate-400 text-xs mt-1">{p.description?.slice(0,80)}</p>
+          </div>
+          <div className="flex gap-2">
+            {p.featured && <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-xs font-bold">Featured</span>}
+            {p.hidden && <span className="px-2 py-0.5 rounded bg-slate-500/20 text-slate-400 text-xs font-bold">Hidden</span>}
+          </div>
+        </div>
       )} />
     </div>
   );
