@@ -20,7 +20,7 @@ export default function HackathonsSection({ hackathons }) {
   if (!hackathons?.length) return null;
 
   return (
-    <section className="py-20 px-6 relative">
+    <section className="py-16 sm:py-20 px-4 sm:px-6 relative">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -28,21 +28,21 @@ export default function HackathonsSection({ hackathons }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="text-center mb-12 sm:mb-14"
         >
-          <div className="inline-flex mb-5">
+          <div className="inline-flex mb-4 sm:mb-5">
             <span className="section-label"><Trophy size={11} />Hackathons</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight px-4">
             Hackathons &amp; <span className="gradient-text">Competitions</span>
           </h2>
-          <p className="text-slate-500 mt-3 max-w-lg mx-auto text-sm">
+          <p className="text-slate-500 mt-3 max-w-lg mx-auto text-sm px-4">
             Building under pressure, competing with the best.
           </p>
         </motion.div>
 
         {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {hackathons.map((h, i) => {
             const style = getPositionStyle(h.position);
             return (
@@ -53,8 +53,8 @@ export default function HackathonsSection({ hackathons }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.07 }}
                 whileHover={{ y: -4 }}
-                className="relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 flex flex-col gap-4 hover:border-primary/20 transition-all duration-300 overflow-hidden group"
-                style={{ boxShadow: style.glow !== "none" ? `0 0 40px ${style.glow}` : "none" }}
+                className="relative rounded-2xl border border-white/[0.12] bg-slate-900/60 backdrop-blur-xl p-5 flex flex-col gap-4 hover:border-primary/30 hover:bg-slate-900/70 transition-all duration-300 overflow-hidden group shadow-lg shadow-black/50"
+                style={{ boxShadow: style.glow !== "none" ? `0 0 40px ${style.glow}` : "0 4px 20px rgba(0,0,0,0.5)" }}
               >
                 {/* Top row */}
                 <div className="flex items-start justify-between gap-3">

@@ -33,7 +33,7 @@ export default function SkillsSection({ skills }) {
   }
 
   return (
-    <section className="py-24 px-6 relative">
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 relative">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -41,23 +41,24 @@ export default function SkillsSection({ skills }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/30 text-primary text-sm font-medium mb-4">
-            <Zap size={14} />Technical Skills
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass border border-primary/30 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+            <Zap size={12} className="sm:w-3.5 sm:h-3.5" />
+            Technical Skills
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black px-4">
             Technical <span className="gradient-text">Skills</span>
           </h2>
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-primary" />
-            <div className="w-2 h-2 rounded-full bg-primary" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-primary" />
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-primary" />
+            <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-primary" />
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-primary" />
           </div>
         </motion.div>
 
         {/* Category grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {allCats.map((category, catIdx) => {
             const config = categoryConfig[category] || { icon: Zap, gradient: "from-primary to-secondary" };
             const Icon = config.icon;
@@ -70,7 +71,7 @@ export default function SkillsSection({ skills }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: catIdx * 0.08 }}
-                className="glass border border-white/10 rounded-2xl p-6 hover:border-primary/30 transition-all duration-300"
+                className="glass border border-white/10 rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 bg-slate-900/50 backdrop-blur-xl shadow-lg shadow-black/50"
               >
                 {/* Category header */}
                 <div className="flex items-start gap-3 mb-6">

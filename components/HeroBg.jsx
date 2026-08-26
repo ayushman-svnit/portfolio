@@ -22,9 +22,8 @@ export default function HeroBg() {
       const W = canvas.width;
       const H = canvas.height;
 
-      // Clear with void black
-      ctx.fillStyle = "#06060f";
-      ctx.fillRect(0, 0, W, H);
+      // Clear canvas each frame
+      ctx.clearRect(0, 0, W, H);
 
       // ── Central vortex swirl (behind avatar area) ──
       const vx = W * 0.68;

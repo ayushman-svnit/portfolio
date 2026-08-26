@@ -21,7 +21,7 @@ export default function EducationCard({ edu, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 hover:border-primary/20 transition-all duration-300 group"
+      className="rounded-2xl border border-white/[0.12] bg-slate-900/60 backdrop-blur-xl p-6 hover:border-primary/30 hover:bg-slate-900/70 transition-all duration-300 group shadow-lg shadow-black/50"
     >
       {/* Header */}
       <div className="flex items-start gap-4 mb-5">

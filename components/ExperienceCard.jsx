@@ -27,7 +27,7 @@ export default function ExperienceCard({ exp, index }) {
 
       {/* Card */}
       <div className="flex-1 pb-10">
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 hover:border-primary/20 transition-all duration-300 group">
+        <div className="rounded-2xl border border-white/[0.12] bg-slate-900/60 backdrop-blur-xl p-6 hover:border-primary/30 hover:bg-slate-900/70 transition-all duration-300 group shadow-lg shadow-black/50">
 
           {/* Header */}
           <div className="flex flex-wrap items-start justify-between gap-3 mb-4">

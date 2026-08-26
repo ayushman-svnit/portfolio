@@ -13,13 +13,30 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="noise bg-dark min-h-screen">
+      <body className="noise min-h-screen" style={{ background: '#06060f' }}>
         <SupernovaLoader />
+        
+        {/* Video Background - Layer 0 */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="fixed inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0, opacity: 0.3 }}
+        >
+          <source src="/332264_medium.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Particle effects - Layer 2 */}
+        <ParticleBackground />
+        
         <div id="cursor-dot" />
         <div id="cursor-ring" />
         <CustomCursor />
-        <ParticleBackground />
-        <div className="relative z-10">
+        
+        {/* Main content - Layer 10 */}
+        <div className="relative" style={{ zIndex: 10 }}>
           <Navbar />
           <main>{children}</main>
           <Footer />

@@ -28,7 +28,7 @@ export default function HeroSection({ profile }) {
     // Start typing after a delay (to account for loading animation)
     const startDelay = setTimeout(() => {
       setStartTyping(true);
-    }, 7500); // Wait for loader to complete (6.9s) + extra buffer
+    }, 4200); // Wait for simplified loader to complete (3.7s) + extra buffer
     
     return () => clearTimeout(startDelay);
   }, []);
@@ -67,8 +67,11 @@ export default function HeroSection({ profile }) {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Full hero background — vortex + roses */}
-      <HeroBg />
+      {/* HeroBg effects - transparent canvas */}
+      <div className="absolute inset-0">
+        <HeroBg />
+      </div>
+      
       {/* Subtle grid on top */}
       <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
       {/* Yuji Syuku watermark — decorative */}

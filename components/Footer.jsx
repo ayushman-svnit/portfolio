@@ -25,15 +25,31 @@ const socials = [
 ];
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Projects" },
-  { href: "/experience", label: "Experience" },
-  { href: "/education", label: "Education" },
+  { href: "#home", label: "Home" },
+  { href: "#education", label: "Education" },
+  { href: "#experience", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#hackathons", label: "Hackathons" },
+  { href: "#skills", label: "Skills" },
 ];
 
 export default function Footer() {
+  const scrollTo = (e, href) => {
+    e.preventDefault();
+    const id = href.replace('#', '');
+    const el = document.getElementById(id);
+    
+    if (el) {
+      const offsetTop = el.offsetTop - 80; // Account for navbar height
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <footer className="relative overflow-hidden border-t border-white/10">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-slate-900/60 backdrop-blur-xl">
       {/* Background glow blobs */}
       <div className="absolute -top-32 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -top-20 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
@@ -59,9 +75,14 @@ export default function Footer() {
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Quick Links</h4>
             <div className="flex flex-col gap-2">
               {navLinks.map(({ href, label }) => (
-                <Link key={label} href={href} className="text-slate-500 hover:text-white text-sm transition-colors hover:translate-x-1 inline-block duration-200">
+                <a 
+                  key={label} 
+                  href={href}
+                  onClick={(e) => scrollTo(e, href)}
+                  className="text-slate-500 hover:text-white text-sm transition-colors hover:translate-x-1 inline-block duration-200"
+                >
                   {label}
-                </Link>
+                </a>
               ))}
             </div>
           </div>

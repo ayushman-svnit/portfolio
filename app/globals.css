@@ -8,6 +8,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
 :root {
   --primary: #7c3aed;      /* cursed purple */
   --secondary: #2563eb;    /* infinity blue */
@@ -20,7 +26,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background-color: #06060f;
+  background: transparent;
   color: #e2e8f0;
   font-family: 'Satoshi', 'Inter', sans-serif;
   overflow-x: hidden;
@@ -38,7 +44,7 @@ body::before {
   border-radius: 50%;
   animation: voidFloat1 20s ease-in-out infinite;
   pointer-events: none;
-  z-index: 0;
+  z-index: 3;
 }
 body::after {
   content: '';
@@ -51,7 +57,7 @@ body::after {
   border-radius: 50%;
   animation: voidFloat2 25s ease-in-out infinite;
   pointer-events: none;
-  z-index: 0;
+  z-index: 3;
 }
 @keyframes voidFloat1 {
   0%,100% { transform: translate(0,0) scale(1); }

@@ -94,7 +94,9 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 font-display ${
-          scrolled ? 'py-3 glass border-b border-white/[0.06]' : 'py-5'
+          scrolled 
+            ? 'py-3 bg-black/60 backdrop-blur-xl border-b border-white/[0.12] shadow-lg shadow-black/50' 
+            : 'py-5 bg-black/40 backdrop-blur-md border-b border-white/[0.08]'
         }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
@@ -185,7 +187,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] sm:w-[320px] bg-[#0a0a12] border-l border-white/[0.08] z-50 lg:hidden overflow-y-auto"
+              className="fixed top-0 right-0 bottom-0 w-[280px] sm:w-[320px] bg-black/95 backdrop-blur-xl border-l border-white/[0.15] z-50 lg:hidden overflow-y-auto shadow-2xl"
             >
               {/* Mobile menu header */}
               <div className="flex items-center justify-between p-6 border-b border-white/[0.08]">
